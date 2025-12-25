@@ -1,21 +1,19 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Reflection;
-using System.Security.Principal;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
 using System.Windows.Forms;
+using System.Net.Sockets;
+using System.Net;
+using System.Threading;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Net.NetworkInformation;
+using System.Globalization;
+
 using ZedGraph;
 
 namespace nsNetPeak
@@ -437,15 +435,7 @@ namespace nsNetPeak
 
         public NetPeakForm()
         {
-			if (!IsRunningAsAdmin()) {
-				if (RestartAsAdmin())
-					return; // exit current non-admin instance
-			}
-
-			// Your privileged code here
-			Console.WriteLine("Running with admin rights!");
-
-			InitializeComponent();
+            InitializeComponent();
 
             // Set titles & emulate 3d look by double drawing text.
             this.Text = ProductNameAndVersion();
@@ -520,30 +510,8 @@ namespace nsNetPeak
             }
         }
 
-		bool IsRunningAsAdmin() {
-			var identity = WindowsIdentity.GetCurrent();
-			var principal = new WindowsPrincipal(identity);
-			return principal.IsInRole(WindowsBuiltInRole.Administrator);
-		}
-
-		bool RestartAsAdmin() {
-			var exeName = Assembly.GetExecutingAssembly().Location;
-			var startInfo = new ProcessStartInfo(exeName) {
-				UseShellExecute = true,
-				Verb = "runas" // triggers UAC prompt
-			};
-
-			try {
-				Process.Start(startInfo);
-				return true;
-			} catch {
-				Console.WriteLine("User declined elevation.");
-				return false;
-			}
-		}
-
-		// On close stop capture
-		private void NetPeak_Closing(object sender, FormClosingEventArgs e)
+        // On close stop capture
+        private void NetPeak_Closing(object sender, FormClosingEventArgs e)
         {
             this.showTraffic = false;
             if (captureTraffic)
